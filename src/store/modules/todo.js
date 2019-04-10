@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 const state = {
   todos: [
     {
@@ -20,11 +22,33 @@ const getters = {
 }
 
 const actions = {
-
+  fetchTodos: ({ commit }) => {
+    axios.get('https://jsonplaceholder.typicode.com/todos')
+      .then(response => {
+        commit('updateTodos', response.data)
+      })
+      .catch(err => {
+        console.log(err);
+      }) 
+  },
+  AddTodo: ({ commit }, todoValue) => {
+    axios.post('https://jsonplaceholder.typicode.com/todos', todoValue)
+      .then(response => {
+        commit('addTodoToList', response.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  } 
 }
 
 const mutations = {
-
+  updateTodos: (state, data) => {
+    state.todos = data;
+  },
+  addTodoToList: (state, data) => {
+    state.todos.unshift(data);
+  }
 }
 
 export default {
